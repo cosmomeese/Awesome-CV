@@ -1,4 +1,4 @@
-%% Start of file `awesome-cv.cls'.
+%% Start of file `awesome-cv-custom.cls'.
 % Awesome CV Class File
 %
 % This class has been downloaded from:
@@ -7,6 +7,9 @@
 % Author:
 % Claud D. Park <posquit0.bj@gmail.com>
 % http://www.posquit0.com
+%
+% Modified:
+% Jonathan-F. Baril <jonathan.f.baril@gmail.com)
 %
 % Notes:
 % 1) This class file defines the structure and layout of the template file (cv.tex, resume.tex).
@@ -21,7 +24,7 @@
 %-------------------------------------------------------------------------------
 %                Identification
 %-------------------------------------------------------------------------------
-\ProvidesClass{awesome-cv}[2017/02/05 v1.6.1 Awesome Curriculum Vitae Class]
+\ProvidesClass{awesome-cv}[2020/03/15 v1.6.1.x Awesome "Custom" Curriculum Vitae Class]
 \NeedsTeXFormat{LaTeX2e}
 
 
@@ -103,7 +106,7 @@
 %-------------------------------------------------------------------------------
 %% Page Layout
 % Configure page margins with geometry
-\geometry{left=2.0cm, top=1.5cm, right=2.0cm, bottom=2.0cm, footskip=.5cm}
+\geometry{left=2.0cm, top=1.5cm, right=2.0cm, bottom=2.0cm, footskip=.5cm, includehead}
 
 %% Header & Footer
 % Set offset to each header and footer
@@ -119,12 +122,18 @@
 %-------------------------------------------------------------------------------
 %                Configuration for colors
 %-------------------------------------------------------------------------------
+% Custom-colors
+\definecolor{darkblue}{HTML}{365f91}
+\definecolor{lightblue}{HTML}{4f81bd}
+\definecolor{faintgray}{HTML}{666666}
+\definecolor{lightgray}{HTML}{6A6A6A}
+\definecolor{lightblack}{HTML}{2b2b2b}
 % Gray-scale colors
 \definecolor{white}{HTML}{FFFFFF}
 \definecolor{black}{HTML}{000000}
 \definecolor{darkgray}{HTML}{333333}
 \definecolor{gray}{HTML}{5D5D5D}
-\definecolor{lightgray}{HTML}{999999}
+%\definecolor{lightgray}{HTML}{999999}
 % Basic colors
 \definecolor{green}{HTML}{C2E15F}
 \definecolor{orange}{HTML}{FDA333}
@@ -152,18 +161,26 @@
 \setbool{acvSectionColorHighlight}{true}
 
 % Awesome section color
-\def\@sectioncolor#1#2#3{%
-  \ifbool{acvSectionColorHighlight}{{\color{awesome}#1#2#3}}{#1#2#3}%
+\newcommand*{\sectioncolor}[1]{%
+  \ifbool{acvSectionColorHighlight}{{\color{awesome}#1}}{#1}
 }
 
+% Boolean value to switch address location
+\newbool{inlineAddressLocation}
+\setbool{inlineAddressLocation}{true}
+
+% Address location
+%\newcommand*{\isInLineAddress}{%
+%  \ifbool{inlineAddressLocation}{TRUE}{FALSE}
+%} 
 
 %-------------------------------------------------------------------------------
 %                Configuration for fonts
 %-------------------------------------------------------------------------------
 % Set the FontAwesome font to be up-to-date.
-\newfontfamily\FA[Path=\@fontdir]{FontAwesome}
+\setfontfamily\FA[Path=\@fontdir]{FontAwesome}
 % Set font for header (default is Roboto)
-\newfontfamily\headerfont[
+\setfontfamily\headerfont[
   Path=\@fontdir,
   UprightFont=*-Regular,
   ItalicFont=*-Italic,
@@ -171,7 +188,7 @@
   BoldItalicFont=*-BoldItalic,
 ]{Roboto}
 
-\newfontfamily\headerfontlight[
+\setfontfamily\headerfontlight[
   Path=\@fontdir,
   UprightFont=*-Thin,
   ItalicFont=*-ThinItalic,
@@ -188,14 +205,16 @@
 %-------------------------------------------------------------------------------
 % Configure styles for each CV elements
 % For fundamental structures
-\newcommand*{\headerfirstnamestyle}[1]{{\fontsize{32pt}{1em}\headerfontlight\color{graytext} #1}}
-\newcommand*{\headerlastnamestyle}[1]{{\fontsize{32pt}{1em}\headerfont\bfseries\color{text} #1}}
-\newcommand*{\headerpositionstyle}[1]{{\fontsize{7.6pt}{1em}\bodyfont\scshape\color{awesome} #1}}
+\newcommand*{\headerprenominalstyle}[1]{{\fontsize{16pt}{1em}\headerfont\bfseries\color{lighttext} #1}}
+\newcommand*{\headerfirstnamestyle}[1]{{\fontsize{24pt}{1em}\headerfont\bfseries\color{text} #1}}
+\newcommand*{\headerlastnamestyle}[1]{{\fontsize{24pt}{1em}\headerfont\bfseries\color{text} #1}}
+\newcommand*{\headerpostnominalstyle}[1]{{\fontsize{16pt}{1em}\headerfont\bfseries\color{lighttext} #1}}
+\newcommand*{\headerpositionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\scshape\color{awesome} #1}}
 \newcommand*{\headeraddressstyle}[1]{{\fontsize{8pt}{1em}\headerfont\itshape\color{lighttext} #1}}
 \newcommand*{\headersocialstyle}[1]{{\fontsize{6.8pt}{1em}\headerfont\color{text} #1}}
 \newcommand*{\headerquotestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\itshape\color{darktext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
-\newcommand*{\sectionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\bfseries\color{text}\@sectioncolor #1}}
+\newcommand*{\sectionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\bfseries\color{text}\sectioncolor{#1}}}
 \newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{text}{#1}}}
 \newcommand*{\paragraphstyle}{\fontsize{9pt}{1em}\bodyfontlight\upshape\color{text}}
 
@@ -223,16 +242,6 @@
 \newcommand*{\skilltypestyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
 \newcommand*{\skillsetstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\color{text} #1}}
 
-% For elements of the cover letter
-\newcommand*{\lettersectionstyle}[1]{{\fontsize{14pt}{1em}\bodyfont\bfseries\color{text}\@sectioncolor #1}}
-\newcommand*{\recipientaddressstyle}[1]{{\fontsize{9pt}{1em}\bodyfont\scshape\color{graytext} #1}}
-\newcommand*{\recipienttitlestyle}[1]{{\fontsize{11pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
-\newcommand*{\lettertitlestyle}[1]{{\fontsize{10pt}{1em}\bodyfontlight\bfseries\color{darktext} \underline{#1}}}
-\newcommand*{\letterdatestyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\slshape\color{graytext} #1}}
-\newcommand*{\lettertextstyle}{\fontsize{10pt}{1.4em}\bodyfontlight\upshape\color{graytext}}
-\newcommand*{\letternamestyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
-\newcommand*{\letterenclosurestyle}[1]{{\fontsize{10pt}{1em}\bodyfontlight\slshape\color{lighttext} #1}}
-
 
 %-------------------------------------------------------------------------------
 %                Commands for personal information
@@ -255,22 +264,26 @@
 \def\@photoalign{left}
 
 % Define writer's name
-% Usage: \name{<firstname>}{<lastname>}
+% Usage: \name{<firstname>}{<lastname>}{<postnominals>}{<prenominals>}
 % Usage: \firstname{<firstname>}
 % Usage: \lastname{<lastname>}
 % Usage: \familyname{<familyname>}
-\newcommand*{\name}[2]{\def\@firstname{#1}\def\@lastname{#2}}
+% Usage: \postnominals{<postnominals>}
+% Usage: \prenominals{<prenominals>}
+\newcommand*{\name}[4]{\def\@prenominals{#4}\def\@firstname{#1}\def\@lastname{#2}\def\@postnominals{#3}}
 \newcommand*{\firstname}[1]{\def\@firstname{#1}}
 \newcommand*{\lastname}[1]{\def\@lastname{#1}}
 \newcommand*{\familyname}[1]{\def\@lastname{#1}}
 \def\@familyname{\@lastname}
+\newcommand*{\postnominals}[1]{\def\@postnominals{#1}}
+\newcommand*{\prenominals}[1]{\def\@prenominals{#1}}
 
 % Define writer's address
 % Usage: \address{<address>}
 \newcommand*{\address}[1]{\def\@address{#1}}
 
 % Define writer's position
-% Usage: \position{<position>}
+% Usage: \name{<position>}
 \newcommand*{\position}[1]{\def\@position{#1}}
 
 % Defines writer's mobile (optional)
@@ -278,7 +291,7 @@
 \newcommand*{\mobile}[1]{\def\@mobile{#1}}
 
 % Defines writer's email (optional)
-% Usage: \email{<email address>}
+% Usage: \email{<email adress>}
 \newcommand*{\email}[1]{\def\@email{#1}}
 
 % Defines writer's homepage (optional)
@@ -303,7 +316,6 @@
 % Usage: \linkedin{<linked-in-nick>}
 \newcommand*{\linkedin}[1]{\def\@linkedin{#1}}
 
-% Defines writer's twitter (optional)
 % Usage: \twitter{<twitter handle>}
 \newcommand*{\twitter}[1]{\def\@twitter{#1}}
 
@@ -319,25 +331,7 @@
 % Usage: \xing{<xing name>}
 \newcommand*{\xing}[1]{\def\@xing{#1}}
 
-% Defines writer's medium profile (optional)
-% Usage: \medium{<medium account>}
-\newcommand*{\medium}[1]{\def\@medium{#1}}
-
-% Defines writer's google scholar profile (optional)
-% Usage: \googlescholar{<googlescholar userid>}{<googlescholar username>}
-% e.g.https://scholar.google.co.uk/citations?user=wpZDx1cAAAAJ
-% would be \googlescholar{wpZDx1cAAAAJ}{Name-to-display-next-icon}
-% If 'googlescholar-name' is not provided than it defaults to
-% '\firstname \lastname'
-\newcommand*{\googlescholar}[2]{%
-  \def\@googlescholarid{#1}%
-  \ifthenelse{\equal{#2}{}}{%
-    \def\@googlescholarname{\@firstname~\@lastname}%
-  }{%
-    \def\@googlescholarname{#2}%
-  }%
-}
-
+% Defines writer's twitter (optional)
 % Defines writer's extra informations (optional)
 % Usage: \extrainfo{<extra informations>}
 \newcommand*{\extrainfo}[1]{\def\@extrainfo{#1}}
@@ -345,39 +339,6 @@
 % Defines writer's quote (optional)
 % Usage: \quote{<quote>}
 \renewcommand*{\quote}[1]{\def\@quote{#1}}
-
-% Defines recipient's information (cover letter only)
-% Usage: \recipient{<recipient name>}{<recipient address>}
-% Usage: \recipientname{<recipient name>}
-% Usage: \recipientaddress{<recipient address>}
-\newcommand*{\recipient}[2]{\def\@recipientname{#1}\def\@recipientaddress{#2}}
-\newcommand*{\recipientname}[1]{\def\@recipientname{#1}}
-\newcommand*{\recipientaddress}[1]{\def\@recipientaddress{#1}}
-
-% Defines the title for letter (cover letter only, optional)
-% Usage: \lettertitle{<title>}
-\newcommand*{\lettertitle}[1]{\def\@lettertitle{#1}}
-
-% Defines the date for letter (cover letter only)
-% Usage: \letterdate{<date>}
-\newcommand*{\letterdate}[1]{\def\@letterdate{#1}}
-
-% Defines a message of opening for letter (cover letter only)
-% Usage: \letteropening{<message>}
-\newcommand*{\letteropening}[1]{\def\@letteropening{#1}}
-
-% Defines a message of closing for letter (cover letter only)
-% Usage: \letterclosing{<message>}
-\newcommand*{\letterclosing}[1]{\def\@letterclosing{#1}}
-
-% Defines an enclosure for letter (cover letter only, optional)
-% Usage: \letterenclosure[<enclosure name>]{<enclosure>}
-\newcommand*{\letterenclname}[1][Enclosure]{\def\@letterenclname{#1}}
-\newcommand*{\letterenclosure}[2][]{%
-  % if an optional argument is provided, use it to redefine \enclname
-  \ifthenelse{\equal{#1}{}}{}{\def\@letterenclname{#1}}
-  \def\@letterenclosure{#2}
-}
 
 
 %-------------------------------------------------------------------------------
@@ -448,17 +409,25 @@
   \end{minipage}
   \begin{minipage}[c]{\headertextwidth}
     \ifthenelse{\equal{#1}{L}}{\raggedright}{\ifthenelse{\equal{#1}{R}}{\raggedleft}{\centering}}
-    \headerfirstnamestyle{\@firstname}\headerlastnamestyle{{}\acvHeaderNameDelim\@lastname}%
+	\ifthenelse{\equal{\@prenominals}{}}{}{\headerprenominalstyle{{}\@prenominals\acvHeaderNameDelim}}
+	\headerfirstnamestyle{\@firstname}\headerlastnamestyle{{}\acvHeaderNameDelim\@lastname}
+	\ifthenelse{\equal{\@postnominals}{}}{}{\headerpostnominalstyle{{},\acvHeaderNameDelim\@postnominals}}%
     \\[\acvHeaderAfterNameSkip]%
     \ifthenelse{\isundefined{\@position}}{}{\headerpositionstyle{\@position\\[\acvHeaderAfterPositionSkip]}}%
-    \ifthenelse{\isundefined{\@address}}{}{\headeraddressstyle{\@address\\[\acvHeaderAfterAddressSkip]}}%
+    \ifthenelse{\isundefined{\@address}}%
+	   {}%
+	   {%
+	    \ifbool{inlineAddressLocation}%
+		   {}%
+		   {\headeraddressstyle{\@address\\[\acvHeaderAfterAddressSkip]}}%
+	   }%
     \headersocialstyle{%
       \newbool{isstart}%
       \setbool{isstart}{true}%
       \ifthenelse{\isundefined{\@mobile}}%
         {}%
         {%
-          \faMobile\acvHeaderIconSep\@mobile%
+          \faPhone\acvHeaderIconSep\@mobile%
           \setbool{isstart}{false}%
         }%
       \ifthenelse{\isundefined{\@email}}%
@@ -467,17 +436,27 @@
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
           \href{mailto:\@email}{\faEnvelope\acvHeaderIconSep\@email}%
         }%
+      \ifthenelse{\isundefined{\@address}}%
+        {}%
+        {%
+		  \ifbool{inlineAddressLocation}%
+			  {
+			   \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
+			   {\faHome\acvHeaderIconSep\@address}%
+			  }%
+			  {}%
+        }%	
       \ifthenelse{\isundefined{\@homepage}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{http://\@homepage}{\faHome\acvHeaderIconSep\@homepage}%
+          \href{http://\@homepage}{\faGlobe\acvHeaderIconSep\@homepage}%
         }%
       \ifthenelse{\isundefined{\@github}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://github.com/\@github}{\faGithubSquare\acvHeaderIconSep\@github}%
+          \href{https://github.com/\@github}{\faGithub\acvHeaderIconSep\@github}%
         }%
       \ifthenelse{\isundefined{\@gitlab}}%
         {}%
@@ -495,7 +474,7 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://www.linkedin.com/in/\@linkedin}{\faLinkedinSquare\acvHeaderIconSep\@linkedin}%
+          \href{https://www.linkedin.com/in/\@linkedin}{\faLinkedin\acvHeaderIconSep\@linkedin}%
         }%
       \ifthenelse{\isundefined{\@twitter}}%
         {}%
@@ -520,18 +499,6 @@
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
           \href{https://www.xing.com/profile/\@xing}{\faXingSquare\acvHeaderIconSep\@xing}
-        }%
-      \ifthenelse{\isundefined{\@medium}}%
-        {}%
-        {%
-          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://medium.com/@\@medium}{\faMedium\acvHeaderIconSep\@medium}%
-        }%
-      \ifthenelse{\isundefined{\@googlescholarid}}%
-        {}%
-        {%
-          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://scholar.google.com/citations?user=\@googlescholarid}{\faGraduationCap\acvHeaderIconSep\@googlescholarname}%
         }%
       \ifthenelse{\isundefined{\@extrainfo}}%
         {}%
@@ -600,11 +567,14 @@
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
-    \ifempty{#2#3}
-      {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
-      {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
-      \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
-    \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}}
+    \ifempty{#1#3#4}
+      {\entrytitlestyle{#2} \\
+        \multicolumn{1}{L{\textwidth}}{\descriptionstyle{#5}}}
+      {\ifempty{#2#3}
+          {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
+          {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
+            \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
+        \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}}}
   \end{tabular*}%
 }
 
@@ -679,56 +649,4 @@
   \end{itemize}
   \end{justify}
   \vspace{-4.0mm}
-}
-
-
-%-------------------------------------------------------------------------------
-%                Commands for elements of Cover Letter
-%-------------------------------------------------------------------------------
-% Define an environment for cvletter
-\newenvironment{cvletter}{%
-  \lettertextstyle
-}{%
-}
-
-% Define a section for the cover letter
-% Usage: \lettersection{<section-title>}
-\newcommand{\lettersection}[1]{%
-  \par\addvspace{2.5ex}
-  \phantomsection{}
-  \lettersectionstyle{#1}
-  \color{gray}\vhrulefill{0.9pt}
-  \par\nobreak\addvspace{0.4ex}
-}
-
-% Define a title of the cover letter
-% Usage: \makelettertitle
-\newcommand*{\makelettertitle}{%
-  \vspace{8.4mm}
-  \setlength\tabcolsep{0pt}
-  \setlength{\extrarowheight}{0pt}
-  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
-    \recipienttitlestyle{\@recipientname} & \letterdatestyle{\@letterdate}
-  \end{tabular*}
-  \begin{singlespace}
-    \recipientaddressstyle{\@recipientaddress} \\\\
-  \end{singlespace}
-  \ifthenelse{\isundefined{\@lettertitle}}
-    {}
-    {\lettertitlestyle{\@lettertitle} \\}
-  \lettertextstyle{\@letteropening}
-}
-
-% Define a closing of the cover letter
-% Usage: \makeletterclosing
-\newcommand*{\makeletterclosing}{%
-  \vspace{3.4mm}
-  \lettertextstyle{\@letterclosing} \\\\
-  \letternamestyle{\@firstname\ \@lastname}
-  \ifthenelse{\isundefined{\@letterenclosure}}
-    {\\}
-    {%
-      \\\\\\
-      \letterenclosurestyle{\@letterenclname: \@letterenclosure} \\
-    }
 }
